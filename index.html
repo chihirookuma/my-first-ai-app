@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自己紹介</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a3a6b 0%, #2563eb 50%, #0ea5e9 100%);
+      font-family: 'Segoe UI', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    }
+
+    .card {
+      text-align: center;
+      color: #ffffff;
+      padding: 60px 80px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .greeting {
+      font-size: 4rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      font-size: 1.4rem;
+      font-weight: 300;
+      opacity: 0.85;
+      letter-spacing: 0.1em;
+    }
+
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.6);
+      margin: 24px auto;
+      border-radius: 2px;
+    }
+
+    .description {
+      font-size: 1rem;
+      opacity: 0.75;
+      line-height: 1.8;
+      max-width: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="greeting">こんにちは！👋</div>
+    <div class="divider"></div>
+    <div class="subtitle">はじめまして、私のページへようこそ</div>
+    <div class="divider"></div>
+    <div class="description">
+      これは私の最初のAIアプリです。<br>
+      一緒に素晴らしいものを作りましょう。
+    </div>
+  </div>
+</body>
+</html>
