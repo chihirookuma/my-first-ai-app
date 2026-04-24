@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>成功報酬シミュレーター｜課題解決室</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a3a6b 0%, #2563eb 50%, #0ea5e9 100%);
+      font-family: 'Segoe UI', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+      color: #ffffff;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      opacity: 0.85;
+      letter-spacing: 0.05em;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .card h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      opacity: 0.9;
+    }
+
+    .field-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    input[type="number"] {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="number"]:focus {
+      border-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .unit {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      min-width: 24px;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      outline: none;
+      cursor: pointer;
+    }
+
+    select option {
+      background: #1a3a6b;
+      color: #ffffff;
+    }
+
+    .result-card {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .result-row:last-child {
+      border-bottom: none;
+    }
+
+    .result-label {
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+
+    .result-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .result-value.highlight {
+      font-size: 2rem;
+      color: #fde68a;
+    }
+
+    .note {
+      font-size: 0.85rem;
+      opacity: 0.75;
+      line-height: 1.7;
+      margin-top: 16px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      background: rgba(253, 230, 138, 0.2);
+      border: 1px solid rgba(253, 230, 138, 0.5);
+      border-radius: 999px;
+      margin-left: 8px;
+      color: #fde68a;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-top: 40px;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 480px) {
+      .title { font-size: 1.8rem; }
+      .card { padding: 24px; }
+      .result-value { font-size: 1.2rem; }
+      .result-value.highlight { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="title">成功報酬シミュレーター</div>
+      <div class="subtitle">粗利20% ・ 案件上限30万円 ・ 年間上限200万円</div>
+    </div>
+
+    <div class="card">
+      <h2>入力</h2>
+
+      <div class="field">
+        <label for="industry">業種</label>
+        <select id="industry">
+          <option value="custom">自分で粗利率を入力</option>
+          <option value="food">飲食（粗利率 65%）</option>
+          <option value="retail">小売（粗利率 35%）</option>
+          <option value="salon">サロン（粗利率 80%）</option>
+          <option value="video">映像制作（粗利率 50%）</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="revenue">案件の売上</label>
+        <div class="field-row">
+          <input type="number" id="revenue" value="1000000" min="0" step="10000">
+          <span class="unit">円</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="marginRate">粗利率</label>
+        <div class="field-row">
+          <input type="number" id="marginRate" value="65" min="0" max="100" step="1">
+          <span class="unit">%</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="yearToDate">年初来の累計報酬（他案件分）</label>
+        <div class="field-row">
+          <input type="number" id="yearToDate" value="0" min="0" step="10000">
+          <span class="unit">円</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card result-card">
+      <h2>計算結果</h2>
+
+      <div class="result-row">
+        <span class="result-label">粗利</span>
+        <span class="result-value" id="grossProfit">-</span>
+      </div>
+
+      <div class="result-row">
+        <span class="result-label">計算上の報酬（粗利 × 20%）</span>
+        <span class="result-value" id="rawFee">-</span>
+      </div>
+
+      <div class="result-row">
+        <span class="result-label">案件上限（30万円）適用後 <span class="badge" id="perCaseBadge"></span></span>
+        <span class="result-value" id="cappedFee">-</span>
+      </div>
+
+      <div class="result-row">
+        <span class="result-label">年間上限（200万円）適用後 <span class="badge" id="annualBadge"></span></span>
+        <span class="result-value highlight" id="finalFee">-</span>
+      </div>
+
+      <div class="note" id="note"></div>
+    </div>
+
+    <div class="footer">
+      ※ 本シミュレーターは概算です。実際の契約は「成功報酬契約書」に従います。<br>
+      課題解決室｜沖縄の社長の相談窓口
+    </div>
+  </div>
+
+  <script>
+    const PER_CASE_CAP = 300000;
+    const ANNUAL_CAP = 2000000;
+
+    const industryRates = {
+      food: 65,
+      retail: 35,
+      salon: 80,
+      video: 50
+    };
+
+    const industrySelect = document.getElementById('industry');
+    const revenueInput = document.getElementById('revenue');
+    const marginRateInput = document.getElementById('marginRate');
+    const yearToDateInput = document.getElementById('yearToDate');
+
+    const grossProfitEl = document.getElementById('grossProfit');
+    const rawFeeEl = document.getElementById('rawFee');
+    const cappedFeeEl = document.getElementById('cappedFee');
+    const finalFeeEl = document.getElementById('finalFee');
+    const perCaseBadgeEl = document.getElementById('perCaseBadge');
+    const annualBadgeEl = document.getElementById('annualBadge');
+    const noteEl = document.getElementById('note');
+
+    function formatYen(value) {
+      return Math.floor(value).toLocaleString('ja-JP') + ' 円';
+    }
+
+    function calculate() {
+      const revenue = Number(revenueInput.value) || 0;
+      const marginRate = Number(marginRateInput.value) || 0;
+      const yearToDate = Number(yearToDateInput.value) || 0;
+
+      const grossProfit = revenue * (marginRate / 100);
+      const rawFee = grossProfit * 0.2;
+      const cappedFee = Math.min(rawFee, PER_CASE_CAP);
+
+      const annualRemaining = Math.max(0, ANNUAL_CAP - yearToDate);
+      const finalFee = Math.min(cappedFee, annualRemaining);
+
+      grossProfitEl.textContent = formatYen(grossProfit);
+      rawFeeEl.textContent = formatYen(rawFee);
+      cappedFeeEl.textContent = formatYen(cappedFee);
+      finalFeeEl.textContent = formatYen(finalFee);
+
+      perCaseBadgeEl.textContent = rawFee > PER_CASE_CAP ? '上限到達' : '範囲内';
+      annualBadgeEl.textContent = cappedFee > annualRemaining ? '年間上限到達' : '範囲内';
+
+      const messages = [];
+      if (rawFee > PER_CASE_CAP) {
+        messages.push('この案件は案件上限30万円に到達しています。');
+      }
+      if (cappedFee > annualRemaining) {
+        messages.push('年間上限200万円に達するため、今回の支払いは上限残額までに制限されます。');
+      }
+      if (finalFee === 0) {
+        messages.push('年間上限に既に到達しているため、今回の成功報酬は発生しません。');
+      }
+      if (messages.length === 0) {
+        messages.push('上限の範囲内です。');
+      }
+      noteEl.textContent = messages.join(' ');
+    }
+
+    industrySelect.addEventListener('change', (e) => {
+      const v = e.target.value;
+      if (industryRates[v]) {
+        marginRateInput.value = industryRates[v];
+      }
+      calculate();
+    });
+
+    [revenueInput, marginRateInput, yearToDateInput].forEach(el => {
+      el.addEventListener('input', calculate);
+    });
+
+    calculate();
+  </script>
+</body>
+</html>
