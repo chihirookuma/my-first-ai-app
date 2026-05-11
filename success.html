@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ご購入ありがとうございます | ネタ切れゼロ</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(135deg, #833ab4 0%, #e1306c 50%, #f77737 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic', 'Segoe UI', sans-serif;
+      line-height: 1.7;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 40px 28px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+
+    .check {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #833ab4, #e1306c);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: #fff;
+      animation: popIn 0.4s ease;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.5); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .lead {
+      color: #6b6b6b;
+      font-size: 0.95rem;
+      margin-bottom: 28px;
+    }
+
+    .info-box {
+      background: #faf8f5;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .info-box h3 {
+      font-size: 0.85rem;
+      color: #6b6b6b;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .info-box .code {
+      font-family: 'SF Mono', Consolas, monospace;
+      font-size: 0.95rem;
+      word-break: break-all;
+      color: #1a1a1a;
+      background: #fff;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #ececec;
+    }
+
+    .btn {
+      display: block;
+      padding: 14px;
+      background: linear-gradient(135deg, #833ab4, #e1306c);
+      color: #fff;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(225,48,108,0.3);
+    }
+
+    .status {
+      font-size: 0.85rem;
+      color: #6b6b6b;
+      margin-bottom: 20px;
+    }
+
+    .status.ok { color: #155724; }
+
+    .note {
+      font-size: 0.75rem;
+      color: #999;
+      margin-top: 16px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="check">✓</div>
+    <h1>ご購入ありがとうございます!</h1>
+    <p class="lead">プロプランへのアップグレードが完了しました。今すぐ無制限で投稿ネタを生成できます。</p>
+
+    <div id="licenseBox" class="info-box" style="display:none;">
+      <h3>ライセンスコード</h3>
+      <div id="licenseCode" class="code"></div>
+    </div>
+
+    <p id="status" class="status ok">✓ このブラウザでプロ機能が有効になりました</p>
+
+    <a href="generator.html" class="btn">ツールを使い始める →</a>
+
+    <p class="note">
+      他の端末でも使う場合は、上のライセンスコードを保存してください。<br>
+      ツール画面の「ライセンスコードを入力」から復元できます。
+    </p>
+  </div>
+
+  <script>
+    const LS_KEY_LICENSE = 'ntg_license';
+
+    // Stripe Checkout の success_url に {CHECKOUT_SESSION_ID} を含めて設定すると、
+    // ?session_id=cs_xxx の形で戻ってくる想定です。
+    // 簡易実装としてセッションIDをそのままライセンスコードとして保存します。
+    // より安全にするなら、Webhook + サーバーで検証してから発行してください。
+    const params = new URLSearchParams(location.search);
+    const sessionId = params.get('session_id') || params.get('license');
+
+    if (sessionId) {
+      localStorage.setItem(LS_KEY_LICENSE, sessionId);
+      document.getElementById('licenseBox').style.display = 'block';
+      document.getElementById('licenseCode').textContent = sessionId;
+    } else {
+      // フォールバック: テスト用のダミーコード
+      const fallback = 'PRO-' + Date.now().toString(36).toUpperCase();
+      localStorage.setItem(LS_KEY_LICENSE, fallback);
+      document.getElementById('licenseBox').style.display = 'block';
+      document.getElementById('licenseCode').textContent = fallback;
+    }
+  </script>
+</body>
+</html>
