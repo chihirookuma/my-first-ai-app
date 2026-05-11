@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>投稿ネタ自動生成 | Instagram・Threads</title>
+  <meta name="description" content="テーマを入力するだけでInstagram・Threads用の投稿文を10個生成します。ログイン不要・無料。">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #faf8f5;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --muted: #6b6b6b;
+      --accent: #e1306c;
+      --accent-2: #833ab4;
+      --border: #ececec;
+      --shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic', 'Segoe UI', sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 24px 0 80px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .input-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 88px;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      resize: vertical;
+      transition: border-color 0.2s;
+      background: #fafafa;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: #fff;
+    }
+
+    .examples {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .example-chip {
+      display: inline-block;
+      padding: 4px 10px;
+      margin: 4px 4px 0 0;
+      background: #f3f0ec;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-size: 0.8rem;
+    }
+
+    .example-chip:active { background: #e6e0d8; }
+
+    .generate-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 14px;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(225, 48, 108, 0.3);
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+
+    .generate-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 6px rgba(225, 48, 108, 0.3);
+    }
+
+    .generate-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .results {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .post-card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      animation: fadeIn 0.4s ease both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .post-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .post-type {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .post-text {
+      white-space: pre-wrap;
+      font-size: 0.95rem;
+      line-height: 1.75;
+      word-break: break-word;
+    }
+
+    .copy-btn {
+      margin-top: 12px;
+      width: 100%;
+      padding: 10px;
+      background: #f3f0ec;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .copy-btn:active { background: #e6e0d8; }
+    .copy-btn.copied { background: #d4edda; color: #155724; }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 40px 20px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 480px) {
+      .title { font-size: 1.4rem; }
+      .container { padding: 16px 0 60px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">投稿ネタ自動生成</h1>
+      <p class="subtitle">Instagram・Threads用の投稿文を10個まとめて作成</p>
+    </div>
+
+    <div class="input-card">
+      <label for="topic">テーマ・キーワードを入力</label>
+      <textarea id="topic" placeholder="例: 一人暮らしの節約術、副業、子育てのコツ"></textarea>
+      <div class="examples">
+        <span class="example-chip" data-ex="一人暮らしの節約術">一人暮らしの節約術</span>
+        <span class="example-chip" data-ex="ダイエット">ダイエット</span>
+        <span class="example-chip" data-ex="フリーランスの仕事術">フリーランスの仕事術</span>
+        <span class="example-chip" data-ex="朝活">朝活</span>
+        <span class="example-chip" data-ex="読書">読書</span>
+      </div>
+      <button id="generate" class="generate-btn">10個の投稿文を生成する</button>
+    </div>
+
+    <div id="results" class="results">
+      <div class="empty">上のフォームにテーマを入れて生成ボタンを押してください</div>
+    </div>
+
+    <div class="footer">ログイン不要 / 無料で何度でも使えます</div>
+  </div>
+
+  <script>
+    const templates = [
+      {
+        type: '共感フック型',
+        build: (t) => `${t}って、最初みんなこう思うんですよね。\n\n「自分には無理かも」\n「センスがないとできない」\n「もう遅いんじゃないか」\n\nでも実は、続けてる人ほど最初は同じこと思ってました。\n\n大事なのは"才能"じゃなくて、小さく始めること。\n\n保存しておくと、迷ったとき見返せます🔖`
+      },
+      {
+        type: 'リスト型(5選)',
+        build: (t) => `${t}で結果を出してる人がやってる5つのこと\n\n①毎日少しでも触れる時間を作る\n②完璧より公開を優先する\n③1日1つだけ振り返る\n④比較対象を昨日の自分にする\n⑤環境を整えてから動く\n\n全部やる必要はないです。\n1つ選んで今日試してみてください。`
+      },
+      {
+        type: '逆張り型',
+        build: (t) => `${t}について、ちょっと逆のこと言います。\n\n「頑張れば結果が出る」って、半分ウソです。\n\n正しくは、"正しい方向に頑張れば"結果が出る。\n\n方向が間違ってると、努力するほどしんどくなります。\n\nまず立ち止まって、今やってることが本当に必要か3秒考えてみてください。`
+      },
+      {
+        type: '失敗談型',
+        build: (t) => `${t}で、私が一番やらかした話。\n\n最初の頃、とにかく情報を集めまくってました。\n本を10冊、動画を50本、ブログも100記事。\n\n結果? 何も変わらなかったです。\n\n動き出してから初めて、必要な情報がわかりました。\n\nインプットは、行動した後の方が10倍効きます。`
+      },
+      {
+        type: '質問投げかけ型',
+        build: (t) => `${t}を始めたい人に質問です。\n\n「なんで今、それをやりたいんですか?」\n\nこの答えがふわっとしてると、3日で挫折します。\n\n逆にここがハッキリしてる人は、勝手に続きます。\n\nあなたの理由、コメントで教えてください👇`
+      },
+      {
+        type: '常識破壊型',
+        build: (t) => `【知らないと損】${t}の常識、実は古いです。\n\n昔: とにかく量をこなす\n今: 1つを深く繰り返す\n\n昔: 完璧にしてから出す\n今: 60%で出してから直す\n\n昔: 一人で頑張る\n今: 環境とコミュニティに頼る\n\n時代に合わせて、やり方も更新していきましょう。`
+      },
+      {
+        type: 'ストーリー型',
+        build: (t) => `${t}を始めて、人生が地味に変わった話。\n\n最初の1ヶ月: 何も起きない、不安\nの2ヶ月目: 少しだけ慣れる、まだ実感ない\n3ヶ月目: ふと、自分の変化に気づく\n半年後: 周りから「変わったね」と言われる\n\n変化は急に来ません。\n気づいた時には、もう別人になってます。`
+      },
+      {
+        type: 'チェックリスト型',
+        build: (t) => `${t}が続かない人の特徴チェック\n\n□ 目標が大きすぎる\n□ 完璧にやろうとしてる\n□ 結果を急ぎすぎてる\n□ 一人で抱え込んでる\n□ 比較対象が他人になってる\n\n2つ以上当てはまったら要注意。\n\nまずは1つだけ、ハードルを下げてみましょう。`
+      },
+      {
+        type: '時短Tips型',
+        build: (t) => `${t}の時間を半分にする3つのコツ\n\n1. やらないことを先に決める\n2. 朝イチの30分に集中する\n3. 終わる時間を先に決める\n\n特に③が効きます。\n\n「9時までに終わらせる」って決めると、なぜか終わります。\n\n時間は"作る"より"区切る"です。`
+      },
+      {
+        type: '名言引用型',
+        build: (t) => `${t}に悩んだ時、いつも思い出す言葉。\n\n「小さな一歩は、何もしないより無限大に大きい」\n\nやるかやらないかで、結果は0か無限大に分かれます。\n\n10分でも、1ページでも、1行でもいい。\n\n"何かを動かした自分"を、今日作りましょう。\n\n保存して、迷った日に開いてください🔖`
+      }
+    ];
+
+    const hashtags = {
+      generic: ['#今日の学び', '#マインドセット', '#成長記録', '#自分磨き', '#人生変えたい'],
+      build: (topic) => {
+        const cleaned = topic.replace(/[、。\s,]/g, '').slice(0, 12);
+        return [`#${cleaned}`, ...hashtags.generic.slice(0, 4)].join(' ');
+      }
+    };
+
+    const topicEl = document.getElementById('topic');
+    const resultsEl = document.getElementById('results');
+    const generateBtn = document.getElementById('generate');
+
+    document.querySelectorAll('.example-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        topicEl.value = chip.dataset.ex;
+        topicEl.focus();
+      });
+    });
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function generate() {
+      const topic = topicEl.value.trim();
+      if (!topic) {
+        topicEl.focus();
+        return;
+      }
+
+      generateBtn.disabled = true;
+      generateBtn.textContent = '生成中...';
+
+      const ordered = shuffle(templates);
+      const tag = hashtags.build(topic);
+
+      resultsEl.innerHTML = '';
+      ordered.forEach((tpl, i) => {
+        const text = `${tpl.build(topic)}\n\n${tag}`;
+        const card = document.createElement('div');
+        card.className = 'post-card';
+        card.style.animationDelay = `${i * 0.04}s`;
+        card.innerHTML = `
+          <div class="post-header">
+            <span class="post-num">投稿 ${i + 1}</span>
+            <span class="post-type">${tpl.type}</span>
+          </div>
+          <div class="post-text"></div>
+          <button class="copy-btn">📋 コピーする</button>
+        `;
+        card.querySelector('.post-text').textContent = text;
+        const btn = card.querySelector('.copy-btn');
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(text);
+            btn.textContent = '✓ コピーしました';
+            btn.classList.add('copied');
+            setTimeout(() => {
+              btn.textContent = '📋 コピーする';
+              btn.classList.remove('copied');
+            }, 1800);
+          } catch {
+            btn.textContent = 'コピー失敗';
+          }
+        });
+        resultsEl.appendChild(card);
+      });
+
+      generateBtn.disabled = false;
+      generateBtn.textContent = 'もう一度生成する';
+
+      const firstCard = resultsEl.querySelector('.post-card');
+      if (firstCard) firstCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    generateBtn.addEventListener('click', generate);
+  </script>
+</body>
+</html>
