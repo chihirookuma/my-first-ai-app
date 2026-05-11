@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>課題解決室｜経営ポータル</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+      color: #e6edf3;
+      background: #0b1220;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at top left, #1a3a6b 0%, #0b1220 60%);
+    }
+
+    /* ===== Sidebar ===== */
+    .sidebar {
+      width: 280px;
+      min-width: 280px;
+      background: rgba(10, 15, 28, 0.85);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      padding: 28px 20px;
+      overflow-y: auto;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .brand {
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #ffffff;
+    }
+
+    .brand-subtitle {
+      font-size: 0.72rem;
+      opacity: 0.6;
+      margin-top: 4px;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-category {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: #7cc4ff;
+      text-transform: uppercase;
+      margin: 24px 0 8px;
+      padding: 0 8px;
+    }
+
+    .nav-category:first-of-type {
+      margin-top: 0;
+    }
+
+    .nav-item {
+      display: block;
+      padding: 9px 12px;
+      margin-bottom: 2px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #c9d1d9;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      border: 1px solid transparent;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+    }
+
+    .nav-item.active {
+      background: rgba(124, 196, 255, 0.15);
+      color: #ffffff;
+      border-color: rgba(124, 196, 255, 0.35);
+    }
+
+    /* ===== Main Content ===== */
+    .main {
+      flex: 1;
+      padding: 40px 56px 60px;
+      max-width: 960px;
+      overflow-x: hidden;
+    }
+
+    .breadcrumb {
+      font-size: 0.8rem;
+      opacity: 0.6;
+      margin-bottom: 8px;
+    }
+
+    /* ===== Home / Dashboard ===== */
+    .hero {
+      margin-bottom: 40px;
+    }
+
+    .hero-title {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(120deg, #ffffff 0%, #7cc4ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      opacity: 0.75;
+      line-height: 1.7;
+      max-width: 640px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin: 28px 0 40px;
+    }
+
+    .kpi-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .kpi-label {
+      font-size: 0.75rem;
+      opacity: 0.65;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .kpi-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #7cc4ff;
+    }
+
+    .kpi-note {
+      font-size: 0.75rem;
+      opacity: 0.6;
+      margin-top: 4px;
+    }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 32px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-tag {
+      font-size: 0.68rem;
+      padding: 3px 8px;
+      background: rgba(124, 196, 255, 0.15);
+      border: 1px solid rgba(124, 196, 255, 0.3);
+      border-radius: 999px;
+      color: #7cc4ff;
+      letter-spacing: 0.05em;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .doc-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 18px;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s, background 0.15s;
+      text-align: left;
+      color: inherit;
+      text-decoration: none;
+      display: block;
+    }
+
+    .doc-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(124, 196, 255, 0.4);
+      background: rgba(124, 196, 255, 0.06);
+    }
+
+    .doc-card-owner {
+      font-size: 0.7rem;
+      opacity: 0.7;
+      margin-bottom: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    .doc-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+
+    .doc-card-desc {
+      font-size: 0.82rem;
+      opacity: 0.7;
+      line-height: 1.6;
+    }
+
+    /* ===== Markdown Content ===== */
+    .md-content {
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    .md-content h1 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .md-content h2 {
+      font-size: 1.4rem;
+      margin: 28px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .md-content h3 {
+      font-size: 1.1rem;
+      margin: 22px 0 10px;
+      color: #7cc4ff;
+    }
+
+    .md-content h4 {
+      font-size: 0.98rem;
+      margin: 16px 0 8px;
+    }
+
+    .md-content p {
+      margin-bottom: 12px;
+      opacity: 0.92;
+    }
+
+    .md-content ul,
+    .md-content ol {
+      margin: 8px 0 14px 24px;
+    }
+
+    .md-content li {
+      margin-bottom: 4px;
+      opacity: 0.92;
+    }
+
+    .md-content strong {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .md-content blockquote {
+      border-left: 3px solid #7cc4ff;
+      padding: 8px 16px;
+      margin: 14px 0;
+      background: rgba(124, 196, 255, 0.05);
+      border-radius: 0 8px 8px 0;
+      opacity: 0.9;
+    }
+
+    .md-content code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+    }
+
+    .md-content pre {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 14px 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+
+    .md-content pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .md-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 0.88rem;
+    }
+
+    .md-content th,
+    .md-content td {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    .md-content th {
+      background: rgba(124, 196, 255, 0.1);
+      font-weight: 600;
+    }
+
+    .md-content tr:nth-child(2n) td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .md-content hr {
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin: 24px 0;
+    }
+
+    .md-content a {
+      color: #7cc4ff;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(124, 196, 255, 0.4);
+    }
+
+    .md-content a:hover {
+      border-bottom-style: solid;
+    }
+
+    /* ===== Simulator iframe ===== */
+    .iframe-wrap {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .iframe-wrap iframe {
+      width: 100%;
+      height: 1100px;
+      border: none;
+      display: block;
+    }
+
+    /* ===== Loading / Error ===== */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      opacity: 0.6;
+    }
+
+    .error {
+      padding: 20px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: 8px;
+      color: #fca5a5;
+      margin: 20px 0;
+    }
+
+    /* ===== Menu toggle (mobile) ===== */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: rgba(11, 18, 32, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+
+    @media (max-width: 860px) {
+      body {
+        flex-direction: column;
+      }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 85%;
+        max-width: 320px;
+        height: 100vh;
+        transform: translateX(-100%);
+        transition: transform 0.25s;
+        z-index: 50;
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main {
+        padding: 60px 20px 40px;
+      }
+      .menu-toggle {
+        display: block;
+      }
+      .hero-title { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <button class="menu-toggle" id="menuToggle">☰ メニュー</button>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-title">課題解決室</div>
+      <div class="brand-subtitle">MANAGEMENT PORTAL</div>
+    </div>
+
+    <div class="nav-category">ダッシュボード</div>
+    <a class="nav-item" data-route="home">🏠 ホーム</a>
+    <a class="nav-item" data-route="doc:TEAM.md">経営チーム体制</a>
+
+    <div class="nav-category">戦略・意思決定</div>
+    <a class="nav-item" data-route="doc:discussions/01-business-strategy.md">第1回: 事業戦略レビュー</a>
+    <a class="nav-item" data-route="doc:discussions/02-success-fee-structure.md">第2回: 成功報酬の上限設定</a>
+
+    <div class="nav-category">運用テンプレート</div>
+    <a class="nav-item" data-route="doc:docs/service-definition.md">サービス定義書</a>
+    <a class="nav-item" data-route="doc:docs/success-fee-contract-template.md">成功報酬契約書雛形</a>
+    <a class="nav-item" data-route="doc:docs/proposal-case-list-template.md">提案起因案件リスト</a>
+    <a class="nav-item" data-route="doc:docs/gross-profit-tracking-schema.md">粗利トラッキングDB設計</a>
+
+    <div class="nav-category">営業・マーケ</div>
+    <a class="nav-item" data-route="doc:docs/sales-scripts.md">営業トーク集</a>
+    <a class="nav-item" data-route="doc:docs/target-list-template.md">ターゲットリスト</a>
+    <a class="nav-item" data-route="doc:docs/marketing-copy.md">マーケティングコピー</a>
+
+    <div class="nav-category">ツール</div>
+    <a class="nav-item" data-route="simulator">💰 成功報酬シミュレーター</a>
+  </aside>
+
+  <main class="main" id="main">
+    <!-- content injected here -->
+  </main>
+
+  <script>
+    const DOCS = [
+      {
+        category: '戦略・意思決定',
+        items: [
+          { owner: '全チーム', title: '第1回: 事業戦略レビュー', desc: '99円/3万円プラン、ターゲット業種、成功報酬の基本設計を決定。', path: 'discussions/01-business-strategy.md' },
+          { owner: '全チーム', title: '第2回: 成功報酬の上限設定', desc: '案件30万円・年間200万円・12ヶ月期間の詳細設計。', path: 'discussions/02-success-fee-structure.md' },
+        ],
+      },
+      {
+        category: '運用テンプレート',
+        items: [
+          { owner: '商品企画', title: 'サービス定義書', desc: '99円/3万円/10万円プランの正式定義。', path: 'docs/service-definition.md' },
+          { owner: '経理', title: '成功報酬契約書雛形', desc: '全12条の契約書。弁護士レビュー前提。', path: 'docs/success-fee-contract-template.md' },
+          { owner: '経理 + 技術', title: '提案起因案件リスト', desc: '月次で甲乙が合意するフォーマット。', path: 'docs/proposal-case-list-template.md' },
+          { owner: '技術', title: '粗利トラッキングDB設計', desc: 'Notion 3データベース構成＋自動計算式。', path: 'docs/gross-profit-tracking-schema.md' },
+        ],
+      },
+      {
+        category: '営業・マーケ',
+        items: [
+          { owner: '営業', title: '営業トーク集', desc: '初回接触〜アップセル〜紹介依頼まで。', path: 'docs/sales-scripts.md' },
+          { owner: '営業', title: 'ターゲットリスト', desc: '120社の選定方針とTier分類。', path: 'docs/target-list-template.md' },
+          { owner: 'マーケ', title: 'マーケティングコピー', desc: 'LP・SNS・業種別メッセージ集。', path: 'docs/marketing-copy.md' },
+        ],
+      },
+      {
+        category: 'ツール',
+        items: [
+          { owner: 'マーケ + 技術', title: '成功報酬シミュレーター', desc: '粗利・売上を入力して報酬を即時計算。', route: 'simulator' },
+        ],
+      },
+    ];
+
+    const main = document.getElementById('main');
+    const sidebar = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menuToggle');
+
+    menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+
+    function setActive(route) {
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.toggle('active', el.dataset.route === route);
+      });
+    }
+
+    function renderHome() {
+      main.innerHTML = `
+        <div class="hero">
+          <div class="hero-title">課題解決室 経営ポータル</div>
+          <div class="hero-subtitle">
+            沖縄の社長のための月額99円・相談窓口。<br>
+            経営判断・運用テンプレート・営業資材をひとつの場所に。
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">3ヶ月KPI</div>
+            <div class="kpi-value">5件</div>
+            <div class="kpi-note">3万円プラン契約（最優先）</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">案件上限</div>
+            <div class="kpi-value">¥300,000</div>
+            <div class="kpi-note">成功報酬・粗利20%</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">年間上限</div>
+            <div class="kpi-value">¥2,000,000</div>
+            <div class="kpi-note">顧客1社あたり</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">ターゲット</div>
+            <div class="kpi-value">4業種</div>
+            <div class="kpi-note">飲食・小売・サロン・映像</div>
+          </div>
+        </div>
+
+        ${DOCS.map(cat => `
+          <div class="section-title">
+            ${cat.category}
+            <span class="section-tag">${cat.items.length} ${cat.items.length > 1 ? 'items' : 'item'}</span>
+          </div>
+          <div class="card-grid">
+            ${cat.items.map(item => `
+              <a class="doc-card" data-route="${item.route || 'doc:' + item.path}">
+                <div class="doc-card-owner">👤 ${item.owner}</div>
+                <div class="doc-card-title">${item.title}</div>
+                <div class="doc-card-desc">${item.desc}</div>
+              </a>
+            `).join('')}
+          </div>
+        `).join('')}
+      `;
+
+      main.querySelectorAll('.doc-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          e.preventDefault();
+          navigate(card.dataset.route);
+        });
+      });
+    }
+
+    async function renderDoc(path) {
+      main.innerHTML = `<div class="loading">読み込み中…</div>`;
+      try {
+        const res = await fetch(path);
+        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+        const md = await res.text();
+        const html = marked.parse(md);
+        main.innerHTML = `
+          <div class="breadcrumb">${path}</div>
+          <div class="md-content">${html}</div>
+        `;
+      } catch (err) {
+        main.innerHTML = `
+          <div class="error">
+            <strong>読み込みエラー:</strong> ${path}<br>
+            <small>${err.message}</small><br><br>
+            <small>※ ローカルで開いている場合、ブラウザのCORS制限により読み込めないことがあります。
+            HTTPサーバー経由で表示してください（例: <code>npx serve</code> や GitHub Pages）。</small>
+          </div>
+        `;
+      }
+    }
+
+    function renderSimulator() {
+      main.innerHTML = `
+        <div class="breadcrumb">ツール / 成功報酬シミュレーター</div>
+        <div class="hero">
+          <div class="hero-title" style="font-size: 1.6rem;">成功報酬シミュレーター</div>
+          <div class="hero-subtitle">
+            粗利20% ・ 案件上限30万円 ・ 年間上限200万円を反映した即時計算ツール。
+            営業の場で顧客と一緒に画面を見ながら使えます。
+          </div>
+        </div>
+        <div class="iframe-wrap">
+          <iframe src="simulator.html" loading="lazy"></iframe>
+        </div>
+      `;
+    }
+
+    function navigate(route) {
+      if (!route) route = 'home';
+      location.hash = route;
+    }
+
+    function handleRoute() {
+      const route = location.hash.replace(/^#/, '') || 'home';
+      setActive(route);
+
+      if (route === 'home') {
+        renderHome();
+      } else if (route === 'simulator') {
+        renderSimulator();
+      } else if (route.startsWith('doc:')) {
+        const path = route.substring(4);
+        renderDoc(path);
+      } else {
+        renderHome();
+      }
+
+      main.scrollTo(0, 0);
+      window.scrollTo(0, 0);
+      if (sidebar.classList.contains('open')) sidebar.classList.remove('open');
+    }
+
+    document.querySelectorAll('.nav-item').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        navigate(el.dataset.route);
+      });
+    });
+
+    window.addEventListener('hashchange', handleRoute);
+    handleRoute();
+  </script>
+</body>
+</html>
