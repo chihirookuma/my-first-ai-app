@@ -13,7 +13,7 @@ const ALLOWED_ORIGIN = "*";
 // - "claude-opus-4-7"   : 最高品質（高コスト）
 // - "claude-sonnet-4-6" : バランス型（中コスト）★おすすめ
 // - "claude-haiku-4-5"  : 最も安価で高速（このタスクに十分）
-const MODEL = "claude-opus-4-7";
+const MODEL = "claude-haiku-4-5";
 
 // 1回の生成で返す投稿の個数
 const POST_COUNT = 10;
