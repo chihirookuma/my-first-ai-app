@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>投稿ネタ生成ツール | Instagram & Threads</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a3a6b 0%, #2563eb 50%, #0ea5e9 100%);
+      font-family: 'Segoe UI', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+      color: #ffffff;
+      padding: 24px 16px 60px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      font-weight: 300;
+      opacity: 0.85;
+      letter-spacing: 0.08em;
+    }
+
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.6);
+      margin: 16px auto 0;
+      border-radius: 2px;
+    }
+
+    .input-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 16px;
+    }
+
+    input[type="text"]::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    input[type="text"]:focus {
+      border-color: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .generate-btn {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #1a3a6b;
+      background: #ffffff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      letter-spacing: 0.1em;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+
+    .generate-btn:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .generate-btn:active {
+      transform: scale(0.98);
+    }
+
+    .generate-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .results {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .post {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 18px 18px 14px;
+      backdrop-filter: blur(8px);
+      animation: fadeIn 0.4s ease both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .post-number {
+      font-size: 0.8rem;
+      font-weight: 600;
+      opacity: 0.7;
+      letter-spacing: 0.1em;
+    }
+
+    .copy-btn {
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      color: #1a3a6b;
+      background: rgba(255, 255, 255, 0.85);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+    }
+
+    .copy-btn:active {
+      transform: scale(0.95);
+    }
+
+    .copy-btn.copied {
+      background: #34d399;
+      color: #ffffff;
+    }
+
+    .post-body {
+      font-size: 0.98rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .empty {
+      text-align: center;
+      opacity: 0.7;
+      font-size: 0.9rem;
+      padding: 24px 0;
+    }
+
+    @media (max-width: 480px) {
+      .title { font-size: 1.5rem; }
+      .input-card { padding: 20px; }
+      .post { padding: 16px 14px 12px; }
+      .post-body { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="title">投稿ネタ生成ツール</div>
+      <div class="subtitle">Instagram & Threads</div>
+      <div class="divider"></div>
+    </div>
+
+    <div class="input-card">
+      <label for="topic">テーマ・キーワードを入力</label>
+      <input type="text" id="topic" placeholder="例：朝活、カフェ巡り、副業、子育て…" autocomplete="off">
+      <button class="generate-btn" id="generateBtn">10個のネタを生成する</button>
+    </div>
+
+    <div class="results" id="results">
+      <div class="empty">↑ テーマを入力して、ボタンを押してください</div>
+    </div>
+  </div>
+
+  <script>
+    const templates = [
+      (t) => `【${t}】について語りたい！\n\n最近${t}にハマっている人、増えてますよね。\nみんなはどんなきっかけで始めましたか？\nコメントで教えてください👇\n\n#${t} #日常`,
+
+      (t) => `${t}を始めて気づいた3つのこと\n\n①思っていたより奥が深い\n②続けると景色が変わる\n③仲間ができる\n\n小さな一歩から、世界は広がります🌱\n\n#${t} #気づき`,
+
+      (t) => `正直に言うと、${t}ってちょっと苦手でした。\n\nでも、ある出来事をきっかけに見方が変わって…\n今では毎日が楽しいです。\n\n苦手意識、もったいないかも？\n\n#${t} #体験談`,
+
+      (t) => `${t}好きさんに本気でおすすめしたい5選📝\n\n1．まずは形から入る\n2．SNSで仲間を見つける\n3．記録をつける\n4．無理しない\n5．楽しむ気持ちを忘れない\n\n保存して見返してね💌\n\n#${t} #おすすめ`,
+
+      (t) => `知ってましたか？\n\n実は${t}には、意外と知られていない魅力があるんです。\n\n知れば知るほど深い世界…。\nもっと早く出会いたかった！\n\n#${t} #豆知識`,
+
+      (t) => `${t}で失敗した話、聞いてくれる？😂\n\n張り切りすぎて、最初の1週間で燃え尽きました…\nでも、その失敗があったから今があります。\n\n失敗は、未来へのヒントですね。\n\n#${t} #失敗談`,
+
+      (t) => `今日から${t}、一緒に始めませんか？\n\n始めるのに、特別な準備はいりません。\n大事なのは「やってみる」気持ちだけ。\n\nコメントで宣言してくれた人、応援します🔥\n\n#${t} #チャレンジ`,
+
+      (t) => `${t}を続けて変わったこと\n\n・朝の気分が違う\n・自分に自信がついた\n・新しい出会いが増えた\n\n小さな習慣が、人生を変えてくれました。\n\n#${t} #習慣化`,
+
+      (t) => `${t}って、結局なにが正解？\n\n人によって答えは違うけど、\n「自分が心地よい」が一番の正解だと思う。\n\nあなたの「正解」、教えてください💬\n\n#${t} #考え方`,
+
+      (t) => `${t}を頑張っているあなたへ。\n\n結果が出ない日も、続けている自分はちゃんと前に進んでます。\n比べるのは、昨日の自分だけでいい。\n\n今日もおつかれさまでした☕\n\n#${t} #応援`
+    ];
+
+    const topicInput = document.getElementById('topic');
+    const generateBtn = document.getElementById('generateBtn');
+    const results = document.getElementById('results');
+
+    function generate() {
+      const topic = topicInput.value.trim();
+      if (!topic) {
+        topicInput.focus();
+        results.innerHTML = '<div class="empty">テーマを入力してください</div>';
+        return;
+      }
+
+      results.innerHTML = '';
+      templates.forEach((tmpl, i) => {
+        const text = tmpl(topic);
+        const post = document.createElement('div');
+        post.className = 'post';
+        post.style.animationDelay = (i * 0.05) + 's';
+        post.innerHTML = `
+          <div class="post-header">
+            <span class="post-number">No. ${String(i + 1).padStart(2, '0')}</span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <div class="post-body"></div>
+        `;
+        post.querySelector('.post-body').textContent = text;
+
+        const copyBtn = post.querySelector('.copy-btn');
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(text);
+            copyBtn.textContent = 'コピー済み✓';
+            copyBtn.classList.add('copied');
+            setTimeout(() => {
+              copyBtn.textContent = 'コピー';
+              copyBtn.classList.remove('copied');
+            }, 1500);
+          } catch (e) {
+            copyBtn.textContent = 'コピー失敗';
+          }
+        });
+
+        results.appendChild(post);
+      });
+    }
+
+    generateBtn.addEventListener('click', generate);
+    topicInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') generate();
+    });
+  </script>
+</body>
+</html>
