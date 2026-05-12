@@ -218,33 +218,17 @@
   </div>
 
   <script>
-    const templates = [
-      (t) => `【${t}】について語りたい！\n\n最近${t}にハマっている人、増えてますよね。\nみんなはどんなきっかけで始めましたか？\nコメントで教えてください👇\n\n#${t} #日常`,
-
-      (t) => `${t}を始めて気づいた3つのこと\n\n①思っていたより奥が深い\n②続けると景色が変わる\n③仲間ができる\n\n小さな一歩から、世界は広がります🌱\n\n#${t} #気づき`,
-
-      (t) => `正直に言うと、${t}ってちょっと苦手でした。\n\nでも、ある出来事をきっかけに見方が変わって…\n今では毎日が楽しいです。\n\n苦手意識、もったいないかも？\n\n#${t} #体験談`,
-
-      (t) => `${t}好きさんに本気でおすすめしたい5選📝\n\n1．まずは形から入る\n2．SNSで仲間を見つける\n3．記録をつける\n4．無理しない\n5．楽しむ気持ちを忘れない\n\n保存して見返してね💌\n\n#${t} #おすすめ`,
-
-      (t) => `知ってましたか？\n\n実は${t}には、意外と知られていない魅力があるんです。\n\n知れば知るほど深い世界…。\nもっと早く出会いたかった！\n\n#${t} #豆知識`,
-
-      (t) => `${t}で失敗した話、聞いてくれる？😂\n\n張り切りすぎて、最初の1週間で燃え尽きました…\nでも、その失敗があったから今があります。\n\n失敗は、未来へのヒントですね。\n\n#${t} #失敗談`,
-
-      (t) => `今日から${t}、一緒に始めませんか？\n\n始めるのに、特別な準備はいりません。\n大事なのは「やってみる」気持ちだけ。\n\nコメントで宣言してくれた人、応援します🔥\n\n#${t} #チャレンジ`,
-
-      (t) => `${t}を続けて変わったこと\n\n・朝の気分が違う\n・自分に自信がついた\n・新しい出会いが増えた\n\n小さな習慣が、人生を変えてくれました。\n\n#${t} #習慣化`,
-
-      (t) => `${t}って、結局なにが正解？\n\n人によって答えは違うけど、\n「自分が心地よい」が一番の正解だと思う。\n\nあなたの「正解」、教えてください💬\n\n#${t} #考え方`,
-
-      (t) => `${t}を頑張っているあなたへ。\n\n結果が出ない日も、続けている自分はちゃんと前に進んでます。\n比べるのは、昨日の自分だけでいい。\n\n今日もおつかれさまでした☕\n\n#${t} #応援`
-    ];
+    // ============================================================
+    // ★ ここにあなたのCloudflare WorkerのURLを貼り付けてください
+    // 例: "https://post-generator-api.your-name.workers.dev"
+    // ============================================================
+    const API_URL = "";
 
     const topicInput = document.getElementById('topic');
     const generateBtn = document.getElementById('generateBtn');
     const results = document.getElementById('results');
 
-    function generate() {
+    async function generate() {
       const topic = topicInput.value.trim();
       if (!topic) {
         topicInput.focus();
@@ -252,9 +236,45 @@
         return;
       }
 
+      if (!API_URL) {
+        results.innerHTML = '<div class="empty">⚠️ API_URL が設定されていません。<br>worker/README.md を参考に設定してください。</div>';
+        return;
+      }
+
+      generateBtn.disabled = true;
+      generateBtn.textContent = 'AIが考え中…（10〜20秒）';
+      results.innerHTML = '<div class="empty">✨ AIが10個の投稿文を考えています…</div>';
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ topic }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          results.innerHTML = `<div class="empty">エラー: ${escapeHtml(data.error || '不明なエラー')}</div>`;
+          return;
+        }
+
+        renderPosts(data.posts || []);
+      } catch (err) {
+        results.innerHTML = '<div class="empty">通信エラーが発生しました。しばらくしてからお試しください。</div>';
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = '10個のネタを生成する';
+      }
+    }
+
+    function renderPosts(posts) {
       results.innerHTML = '';
-      templates.forEach((tmpl, i) => {
-        const text = tmpl(topic);
+      if (posts.length === 0) {
+        results.innerHTML = '<div class="empty">投稿文が取得できませんでした。</div>';
+        return;
+      }
+      posts.forEach((text, i) => {
         const post = document.createElement('div');
         post.className = 'post';
         post.style.animationDelay = (i * 0.05) + 's';
@@ -284,6 +304,12 @@
 
         results.appendChild(post);
       });
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
     }
 
     generateBtn.addEventListener('click', generate);
