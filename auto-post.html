@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自動投稿ツール | Instagram & Threads</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a3a6b 0%, #2563eb 50%, #0ea5e9 100%);
+      font-family: 'Segoe UI', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+      padding: 40px 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 560px;
+      color: #ffffff;
+      padding: 48px 56px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .title {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      font-weight: 300;
+      opacity: 0.85;
+      letter-spacing: 0.08em;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.6);
+      margin: 0 auto 32px;
+      border-radius: 2px;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .field textarea,
+    .field input[type="text"],
+    .field input[type="datetime-local"] {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .field textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .field textarea::placeholder,
+    .field input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .field textarea:focus,
+    .field input:focus {
+      border-color: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .platforms {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .platform {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .platform input {
+      accent-color: #ffffff;
+    }
+
+    .platform:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .submit {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1a3a6b;
+      background: #ffffff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      letter-spacing: 0.1em;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+
+    .submit:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .submit:active {
+      transform: scale(0.98);
+    }
+
+    .note {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      text-align: center;
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="title">自動投稿ツール</div>
+    <div class="subtitle">Instagram & Threads</div>
+    <div class="divider"></div>
+
+    <form>
+      <div class="field">
+        <label for="content">投稿内容</label>
+        <textarea id="content" placeholder="ここに投稿したい文章を入力してください…"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="image">画像URL（任意）</label>
+        <input type="text" id="image" placeholder="https://example.com/image.jpg">
+      </div>
+
+      <div class="field">
+        <label for="schedule">投稿日時</label>
+        <input type="datetime-local" id="schedule">
+      </div>
+
+      <label style="display:block; font-size:0.95rem; font-weight:500; margin-bottom:8px; letter-spacing:0.05em;">投稿先</label>
+      <div class="platforms">
+        <label class="platform">
+          <input type="checkbox" name="platform" value="instagram" checked>
+          Instagram
+        </label>
+        <label class="platform">
+          <input type="checkbox" name="platform" value="threads" checked>
+          Threads
+        </label>
+      </div>
+
+      <button type="submit" class="submit">予約する</button>
+    </form>
+
+    <div class="note">
+      ※ このページは画面のみのサンプルです。<br>
+      実際の投稿機能はこれから実装します。
+    </div>
+  </div>
+</body>
+</html>
