@@ -26,7 +26,7 @@ printf 'sk-proxy-injected' | codex login --with-api-key >/dev/null 2>&1
 # 4. 実行（読み取り専用。WebSocket はプロキシで拒否されるため HTTPS にフォールバックする）
 cd "$workdir" || exit 4
 timeout 900 codex exec --skip-git-repo-check --sandbox read-only \
-  -c 'features.responses_websockets=false' "$prompt" > "$out" 2> "$out.err"
+  -c 'features.responses_websockets=false' "$prompt" < /dev/null > "$out" 2> "$out.err"
 status=$?
 
 if grep -q "Quota exceeded" "$out.err" 2>/dev/null; then
