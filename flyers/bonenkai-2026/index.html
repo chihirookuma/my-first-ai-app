@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>大忘年会 景品ご協力のお願い｜守成クラブ ヒルノ沖縄会場</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@700;900&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  :root{
+    --paper:#f5efe3; --ink:#1d2230; --red:#b3262d; --red-d:#8c1b21; --gold:#a8843a; --line:#d9cdb6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#ccc}
+  .sheet{
+    width:794px;height:1123px;margin:0 auto;background:var(--paper);color:var(--ink);
+    font-family:"Zen Kaku Gothic New",sans-serif;position:relative;overflow:hidden;
+  }
+  /* ミンサー柄（五つ・四つ）帯 */
+  .minsa{height:22px;background:var(--red);display:flex;align-items:center;justify-content:center;gap:26px}
+  .minsa span{display:flex;gap:4px}
+  .minsa i{display:block;width:7px;height:7px;background:var(--paper)}
+  .inner{padding:28px 54px 0}
+
+  .host{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1.5px solid var(--ink);padding-bottom:10px}
+  .host b{font-size:17px;letter-spacing:.12em}
+  .host small{font-family:"Oswald";font-size:14px;letter-spacing:.2em;color:var(--gold)}
+
+  .title{margin-top:18px;display:flex;align-items:flex-end;gap:16px}
+  .title .tag{background:var(--ink);color:var(--paper);font-weight:700;font-size:15px;padding:6px 12px;letter-spacing:.15em;margin-bottom:8px}
+  .title h2{font-family:"Zen Old Mincho";font-weight:900;font-size:40px;letter-spacing:.08em}
+
+  .catch{margin-top:22px;font-family:"Zen Old Mincho";font-weight:900;line-height:1.25;letter-spacing:.02em}
+  .catch .l1{font-size:32px}
+  .catch .l2{font-size:52px;color:var(--red);white-space:nowrap}
+  .catch .l2 em{font-style:normal;background:linear-gradient(transparent 70%, #ecd9a8 70%)}
+  .lead{margin-top:12px;font-size:15.5px;line-height:1.8;font-weight:500}
+  .lead b{font-weight:900}
+
+  .date{margin-top:18px;display:grid;grid-template-columns:auto 1fr;border:2px solid var(--ink)}
+  .date .lbl{background:var(--ink);color:var(--paper);writing-mode:vertical-rl;font-weight:700;letter-spacing:.3em;font-size:15px;padding:14px 10px;text-align:center}
+  .date .body{padding:10px 24px;display:flex;align-items:center;gap:26px}
+  .date .d{font-family:"Oswald";font-weight:600;font-size:58px;line-height:1}
+  .date .d small{font-family:"Zen Kaku Gothic New";font-size:24px;font-weight:700;margin-left:4px}
+  .date .t{font-family:"Oswald";font-size:34px;font-weight:500;line-height:1.1}
+  .date .t span{display:block;font-family:"Zen Kaku Gothic New";font-size:13.5px;font-weight:700;color:#555;letter-spacing:.05em;margin-top:4px}
+
+  h3{margin-top:20px;font-size:17px;font-weight:900;letter-spacing:.12em;display:flex;align-items:center;gap:10px}
+  h3::before{content:"";width:16px;height:3px;background:var(--red)}
+  .merit{margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .merit div{background:#fffaf0;border-top:3px solid var(--red);padding:10px 14px 12px}
+  .merit .n{font-family:"Oswald";color:var(--red);font-size:22px;font-weight:600}
+  .merit p{font-weight:900;font-size:16px;line-height:1.45;margin-top:2px}
+  .merit small{display:block;font-size:12.5px;line-height:1.65;margin-top:6px;font-weight:500;color:#444}
+
+  .ex{margin-top:12px;font-size:15px;line-height:1.8;font-weight:500;border-left:3px solid var(--line);padding-left:14px}
+  .ex b{font-weight:900}
+
+  .apply{margin-top:20px;display:grid;grid-template-columns:1fr 168px;gap:26px;align-items:stretch}
+  .dl{border:2px solid var(--red);padding:16px 20px;position:relative;background:#fffaf0}
+  .dl .k{font-weight:900;color:var(--red);letter-spacing:.15em;font-size:15px}
+  .dl .v{font-family:"Oswald";font-size:44px;font-weight:600;line-height:1.1;margin-top:2px}
+  .dl .v small{font-family:"Zen Kaku Gothic New";font-size:19px;font-weight:700}
+  .dl .v .tm{font-size:28px;margin-left:8px}
+  .dl .note{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:14px;line-height:1.7;font-weight:700}
+  .dl .note b{color:var(--red)}
+  .qr{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+  .qr .box{width:168px;height:168px;background:#fff;position:relative}
+  .qr .box::before{content:"";position:absolute;inset:-7px;
+    --c:var(--ink);--w:2px;--l:26px;
+    background:
+      linear-gradient(var(--c),var(--c)) top left/var(--l) var(--w),linear-gradient(var(--c),var(--c)) top left/var(--w) var(--l),
+      linear-gradient(var(--c),var(--c)) top right/var(--l) var(--w),linear-gradient(var(--c),var(--c)) top right/var(--w) var(--l),
+      linear-gradient(var(--c),var(--c)) bottom left/var(--l) var(--w),linear-gradient(var(--c),var(--c)) bottom left/var(--w) var(--l),
+      linear-gradient(var(--c),var(--c)) bottom right/var(--l) var(--w),linear-gradient(var(--c),var(--c)) bottom right/var(--w) var(--l);
+    background-repeat:no-repeat}
+  .qr p{margin-top:10px;font-size:13px;font-weight:700;letter-spacing:.08em}
+
+  .foot{position:absolute;left:0;right:0;bottom:40px;padding:0 54px;display:flex;justify-content:center;align-items:flex-end;font-size:13px;font-weight:500;color:#444}
+  .foot b{font-size:15px;color:var(--ink);font-weight:900;letter-spacing:.05em}
+  .bottom{position:absolute;bottom:0;left:0;right:0}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="minsa" id="minsa-top"></div>
+  <div class="inner">
+    <div class="host"><b>守成クラブ ヒルノ沖縄会場</b><small>YEAR-END PARTY 2026</small></div>
+
+    <div class="title"><span class="tag">大忘年会</span><h2>景品ご協力のお願い</h2></div>
+
+    <div class="catch">
+      <div class="l1">景品は、</div>
+      <div class="l2"><em>いちばん喜ばれる名刺</em>です。</div>
+    </div>
+    <p class="lead">
+      会場にいるのは、全員が経営者。あなたの商品を手にした一人が、<b>来年のお客さまや紹介者</b>になるかもしれません。<br>
+      一年の締めくくりを盛り上げる景品を、ぜひご提供ください。
+    </p>
+
+    <div class="date">
+      <div class="lbl">開催日時</div>
+      <div class="body">
+        <div class="d">12.24<small>（木）</small></div>
+        <div class="t">15:00 – 18:00<span>守成クラブ ヒルノ沖縄会場 主催</span></div>
+      </div>
+    </div>
+
+    <h3>景品をご提供いただくと</h3>
+    <div class="merit">
+      <div><span class="n">01</span><p>抽選の場で<br>御社名をご紹介</p><small>商品と一緒に、会社名・サービスを全員の前でお伝えします。</small></div>
+      <div><span class="n">02</span><p>「実物」が<br>経営者の手に渡る</p><small>チラシより確実。使ってもらうのが一番の営業です。</small></div>
+      <div><span class="n">03</span><p>1品から<br>大歓迎です</p><small>ご協力は任意です。ご無理のない範囲でお願いします。</small></div>
+    </div>
+
+    <h3>たとえば、こんな景品</h3>
+    <p class="ex"><b>自社商品</b>　／　<b>お食事券</b>　／　<b>施術・セッションの体験券</b>　／　<b>サービス利用券</b>　など<br>
+      「うちの商品、景品になるかな？」と迷ったら、まずはお気軽にご相談ください。</p>
+
+    <div class="apply">
+      <div class="dl">
+        <div class="k">申込期限</div>
+        <div class="v">12.18<small>（金）</small><span class="tm">23:59</span></div>
+        <div class="note">景品は<b>当日、会場へご持参</b>ください。<br>右のQRコードからお申し込みいただけます。</div>
+      </div>
+      <div class="qr"><div class="box"></div><p>お申し込みはこちら</p></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <b>みなさまのご協力、心よりお待ちしています。</b>
+  </div>
+  <div class="minsa bottom" id="minsa-bottom"></div>
+</div>
+<script>
+  // ミンサー柄：五つと四つの四角を交互に並べる
+  document.querySelectorAll('.minsa').forEach(el=>{
+    let h='';
+    for(let k=0;k<14;k++){const n=k%2?4:5;h+='<span>'+'<i></i>'.repeat(n)+'</span>';}
+    el.innerHTML=h;
+  });
+</script>
+</body>
+</html>
